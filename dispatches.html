@@ -1,0 +1,294 @@
+# dispatches.html
+
+```html
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alle Dispatches</title>
+
+<style>
+
+body{
+    margin:0;
+    font-family:Arial;
+    background:#1e3c72;
+}
+
+.header{
+    background:#10264d;
+    color:white;
+    padding:20px;
+    text-align:center;
+    font-size:30px;
+    font-weight:bold;
+}
+
+.container{
+    width:90%;
+    max-width:900px;
+    margin:30px auto;
+}
+
+.dispatch{
+    background:white;
+    padding:20px;
+    margin-bottom:20px;
+    border-radius:15px;
+    box-shadow:0 0 15px rgba(0,0,0,0.3);
+}
+
+.time{
+    color:gray;
+    margin-top:10px;
+}
+
+select{
+    width:100%;
+    padding:12px;
+    margin-top:10px;
+    border-radius:10px;
+    border:1px solid #ccc;
+}
+
+button{
+    width:100%;
+    padding:14px;
+    margin-top:15px;
+    border:none;
+    border-radius:10px;
+    cursor:pointer;
+    font-size:15px;
+}
+
+.back-btn{
+    background:#2a5298;
+    color:white;
+}
+
+.done-btn{
+    background:green;
+    color:white;
+}
+
+.done{
+    opacity:0.6;
+    border-left:10px solid gray;
+}
+
+.low{
+    border-left:10px solid green;
+}
+
+.medium{
+    border-left:10px solid orange;
+}
+
+.high{
+    border-left:10px solid red;
+}
+
+.extreme{
+    border-left:10px solid darkred;
+    background:#ffe5e5;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="header">
+    Alle Dispatches
+</div>
+
+<div class="container">
+
+    <button
+    class="back-btn"
+    onclick="window.location.href='dispatch.html'">
+        Neuer Dispatch
+    </button>
+
+    <div id="dispatchContainer"></div>
+
+</div>
+
+<script>
+
+let dispatches =
+    JSON.parse(
+        localStorage.getItem("dispatches")
+    ) || [];
+
+const container =
+    document.getElementById("dispatchContainer");
+
+function speichern(){
+
+    localStorage.setItem(
+        "dispatches",
+        JSON.stringify(dispatches)
+    );
+}
+
+function einheitSetzen(index,wert){
+
+    dispatches[index].einheit = wert;
+
+    speichern();
+}
+
+function dispatchFertig(index){
+
+    dispatches[index].erledigt = true;
+
+    speichern();
+
+    renderDispatches();
+}
+
+function renderDispatches(){
+
+    container.innerHTML = "";
+
+    if(dispatches.length === 0){
+
+        container.innerHTML = `
+            <div class="dispatch">
+                Keine Dispatches vorhanden.
+            </div>
+        `;
+
+        return;
+    }
+
+    dispatches.forEach((dispatch,index) => {
+
+        let klasse = dispatch.stufe;
+
+        if(dispatch.erledigt){
+            klasse += " done";
+        }
+
+        container.innerHTML += `
+
+        <div class="dispatch ${klasse}">
+
+            <h2>${dispatch.art}</h2>
+
+            <p>
+            <b>📍 Ort:</b>
+            ${dispatch.ort}
+            </p>
+
+            <p>
+            <b>⚠️ Stufe:</b>
+            ${dispatch.stufe}
+            </p>
+
+            <p>
+            <b>📝 Beschreibung:</b><br>
+            ${dispatch.beschreibung}
+            </p>
+
+            <p>
+            <b>⏰ Zeit:</b>
+            ${dispatch.zeit}
+            </p>
+
+            <hr>
+
+            <h3>Einheit auswählen</h3>
+
+            <select
+            onchange="einheitSetzen(${index}, this.value)"
+            ${dispatch.erledigt ? "disabled" : ""}
+            >
+
+                <option value="">
+                    Einheit auswählen
+                </option>
+
+                <option
+                value="🚒 Feuerwehr"
+                ${dispatch.einheit === "🚒 Feuerwehr" ? "selected" : ""}>
+                    🚒 Feuerwehr
+                </option>
+
+                <option
+                value="🚑 Rettungsdienst"
+                ${dispatch.einheit === "🚑 Rettungsdienst" ? "selected" : ""}>
+                    🚑 Rettungsdienst
+                </option>
+
+                <option
+                value="🚓 Polizei"
+                ${dispatch.einheit === "🚓 Polizei" ? "selected" : ""}>
+                    🚓 Polizei
+                </option>
+
+                <option
+                value="🛡️ Security"
+                ${dispatch.einheit === "🛡️ Security" ? "selected" : ""}>
+                    🛡️ Security
+                </option>
+
+                <option
+                value="🧰 Techniker"
+                ${dispatch.einheit === "🧰 Techniker" ? "selected" : ""}>
+                    🧰 Techniker
+                </option>
+
+                <option
+                value="😀 Vorsitzender"
+                ${dispatch.einheit === "😀 Vorsitzender" ? "selected" : ""}>
+                    😀 Vorsitzender
+                </option>
+
+                <option
+                value="🖥 Admin"
+                ${dispatch.einheit === "🖥 Admin" ? "selected" : ""}>
+                    🖥 Admin
+                </option>
+
+                <option
+                value="🛠️ Werker"
+                ${dispatch.einheit === "🛠️ Werker" ? "selected" : ""}>
+                    🛠️ Werker
+                </option>
+
+
+            </select>
+
+            <p>
+            <b>🚨 Zugewiesen:</b>
+            ${dispatch.einheit || "Noch keine Einheit"}
+            </p>
+
+            <button
+            class="done-btn"
+            onclick="dispatchFertig(${index})"
+            ${dispatch.erledigt ? "disabled" : ""}
+            >
+
+                ${dispatch.erledigt
+                ? "✅ Einsatz erledigt"
+                : "✔ Einsatz abschließen"}
+
+            </button>
+
+        </div>
+
+        `;
+    });
+}
+
+renderDispatches();
+
+</script>
+
+</body>
+</html>
+```

@@ -1,0 +1,209 @@
+# dispatch.html
+
+```html
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dispatch System</title>
+
+<style>
+
+body{
+    margin:0;
+    font-family:Arial, sans-serif;
+    background:#1e3c72;
+}
+
+.header{
+    background:#10264d;
+    color:white;
+    padding:20px;
+    text-align:center;
+    font-size:30px;
+    font-weight:bold;
+}
+
+.container{
+    width:90%;
+    max-width:700px;
+    margin:40px auto;
+    background:white;
+    padding:30px;
+    border-radius:20px;
+    box-shadow:0 0 25px rgba(0,0,0,0.4);
+}
+
+input,
+select,
+textarea{
+    width:100%;
+    padding:14px;
+    margin-top:12px;
+    border-radius:10px;
+    border:1px solid #ccc;
+    font-size:15px;
+    box-sizing:border-box;
+}
+
+textarea{
+    resize:none;
+}
+
+button{
+    width:100%;
+    padding:15px;
+    margin-top:15px;
+    border:none;
+    border-radius:12px;
+    font-size:16px;
+    cursor:pointer;
+}
+
+.send-btn{
+    background:#00aa2f;
+    color:white;
+}
+
+.send-btn:hover{
+    background:#008d28;
+}
+
+.dispatch-btn{
+    background:#2a5298;
+    color:white;
+}
+
+.dispatch-btn:hover{
+    background:#163766;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="header">
+    Dispatch System
+</div>
+
+<div class="container">
+
+    <h2>Problem melden</h2>
+
+    <select id="ort">
+        <option value="">Ort auswählen</option>
+        <option>Grüne Funken</option>
+        <option>Rote Funken</option>
+        <option>Bühne</option>
+        <option>Eingang</option>
+        <option>Gaststätte</option>
+        <option>Küche</option>  
+        <option>Saal</option>
+        <option>Tanzfläche/Vorbühne</option>
+        <option>Bar</option>
+        <option>Jugendgarde</option>
+        <option>Minis/Miniminis</option>
+        <option>Dj</option>
+    </select>
+
+    <input type="text"
+    id="art"
+    placeholder="Was ist passiert?">
+
+    <select id="stufe">
+        <option value="">Schweregrad auswählen</option>
+        <option value="low">🟢 Niedrig</option>
+        <option value="medium">🟠 Mittel</option>
+        <option value="high">🔴 Hoch</option>
+        <option value="extreme">🚨 Extrem</option>
+    </select>
+
+    <textarea
+    id="beschreibung"
+    rows="5"
+    placeholder="Beschreibung eingeben..."></textarea>
+
+    <button
+    class="send-btn"
+    onclick="dispatchSenden()">
+        Dispatch senden
+    </button>
+
+    <button
+    class="dispatch-btn"
+    onclick="window.location.href='dispatches.html'">
+        Alle Dispatches ansehen
+    </button>
+
+</div>
+
+<script>
+
+function dispatchSenden(){
+
+    const ort =
+        document.getElementById("ort").value;
+
+    const art =
+        document.getElementById("art").value;
+
+    const stufe =
+        document.getElementById("stufe").value;
+
+    const beschreibung =
+        document.getElementById("beschreibung").value;
+
+    if(
+        !ort ||
+        !art ||
+        !stufe ||
+        !beschreibung
+    ){
+        alert("Bitte alles ausfüllen!");
+        return;
+    }
+
+    const dispatch = {
+
+        id: Date.now(),
+
+        ort: ort,
+
+        art: art,
+
+        stufe: stufe,
+
+        beschreibung: beschreibung,
+
+        zeit: new Date().toLocaleString(),
+
+        einheit: "",
+
+        erledigt: false
+    };
+
+    let dispatches =
+        JSON.parse(
+            localStorage.getItem("dispatches")
+        ) || [];
+
+    dispatches.unshift(dispatch);
+
+    localStorage.setItem(
+        "dispatches",
+        JSON.stringify(dispatches)
+    );
+
+    alert("Dispatch erfolgreich gesendet, die Probleme werden in kürze weggeschaffen!");
+
+    window.location.href =
+        "dispatches.html";
+}
+
+</script>
+
+</body>
+</html>
+```

@@ -1,0 +1,1205 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vorsitzender Dashboard</title>
+
+<style>
+
+body{
+    margin:0;
+    font-family:Arial, sans-serif;
+    background:#111;
+    color:white;
+}
+
+/* LOGIN */
+
+#loginPage{
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:linear-gradient(135deg,#ffffff,#11ff00);
+}
+
+.login-box{
+    background:#1b1b1b;
+    padding:30px;
+    border-radius:20px;
+    width:320px;
+    box-shadow:0 0 25px rgba(0,0,0,0.5);
+}
+
+.login-box h1{
+    text-align:center;
+}
+
+.login-box input{
+    width:100%;
+    padding:12px;
+    margin-top:12px;
+    border:none;
+    border-radius:10px;
+    box-sizing:border-box;
+}
+
+.login-box button{
+    width:100%;
+    padding:12px;
+    margin-top:15px;
+    border:none;
+    border-radius:10px;
+    background:#11ff00;
+    color:white;
+    cursor:pointer;
+    font-size:16px;
+}
+
+.error{
+    color:red;
+    text-align:center;
+    margin-top:10px;
+}
+
+/* DASHBOARD */
+
+#dashboard{
+    display:none;
+}
+
+.topbar{
+    background:#1c1c1c;
+    padding:20px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    border-bottom:2px solid #11ff00;
+}
+
+.logout{
+    background:#11ff00;
+    border:none;
+    padding:10px 15px;
+    border-radius:8px;
+    color:white;
+    cursor:pointer;
+}
+
+.container{
+    padding:30px;
+}
+
+.cards{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:20px;
+}
+
+.card{
+    background:#1f1f1f;
+    padding:20px;
+    border-radius:15px;
+    box-shadow:0 0 15px rgba(0,0,0,0.4);
+}
+
+.card h2{
+    margin-top:0;
+    color:#11ff00;
+}
+
+.card button{
+    width:100%;
+    margin-top:15px;
+    padding:12px;
+    border:none;
+    border-radius:10px;
+    background:#11ff00;
+    color:white;
+    cursor:pointer;
+}
+
+/* INFO BOX */
+
+.info-box{
+    margin-top:30px;
+    background:#1c1c1c;
+    padding:20px;
+    border-radius:15px;
+}
+
+.info-box h2{
+    color:#11ff00;
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- LOGIN -->
+
+<div id="loginPage">
+
+    <div class="login-box">
+
+        <h1>VORSITZENDER LOGIN</h1>
+
+        <input type="password" id="password" placeholder="Passwort">
+
+        <input type="text" id="username" placeholder="Kennwort">
+
+        <button onclick="login()">Anmelden</button>
+
+        <div class="error" id="error"></div>
+
+    </div>
+
+</div>
+
+<!-- DASHBOARD -->
+
+<div id="dashboard">
+
+    <div class="topbar">
+
+        <h1>Vorsitzender Dashboard</h1>
+
+        <button class="logout" onclick="logout()">
+            Logout
+        </button>
+
+    </div>
+
+    <div class="container">
+         <h2 id="clock" style="
+          text-align:center;
+          margin-bottom:30px;
+          font-size:35px;
+          color:#11ff00;
+         "></h2>
+         <h2  id="countdown" style="
+             text-align:center;
+              margin-bottom:30px;
+              font-size:28px;
+               color:#11ff00;
+            "></h2>
+        <div class="cards">
+
+            <div class="card">
+
+    <h2>Benutzer</h2>
+
+    <p>Benutzer verwalten</p>
+
+    <button onclick="toggleUsers()">
+        Öffnen
+    </button>
+
+    <div id="usersBox" style="display:none; margin-top:15px;">
+
+        <button onclick="showInfo('Prinzengarde geöffnet')">
+            Prinzengarde
+        </button>
+
+        <button onclick="showInfo('Funken geöffnet')">
+            Funken
+        </button>
+
+        <button onclick="showInfo('Landsknechte geöffnet')">
+            Landsknechte
+        </button>
+
+        <button onclick="showInfo('Jugendgarde geöffnet')">
+            Jugendgarde
+        </button>
+
+        <button onclick="showInfo('Glitzerkuppen geöffnet')">
+            Glitzerkuppen
+        </button> 
+
+        <button onclick="showInfo('Minis/Miniminis geöffnet')">
+            Minis/Miniminis
+        </button>
+
+        <button onclick="showInfo('Prinzenpaar/Kinderprinzenpaar geöffnet')">
+            Prinzenpaar/Kinderprinzenpaar 
+        </button>
+
+        <button onclick="showInfo('Admin geöffnet')">
+            Admin
+        </button>
+
+
+    </div>
+
+</div>
+
+            <div class="card">
+
+                <h2>Dispatches</h2>
+
+                <p>Dispatch Übersicht öffnen</p>
+
+                <button onclick="window.location.href='dispatches.html'">
+                    Öffnen
+                </button>
+
+            </div>
+
+            <div class="card">
+
+                <h2>Showplan</h2>
+
+                <p>Showplan anzeigen</p>
+
+                <button onclick="window.location.href='showplan.html'">
+                    Öffnen
+                </button>
+
+            </div>
+
+            <div class="card">
+
+                <h2>Webseite</h2>
+
+                <p>Zur Hauptwebseite</p>
+
+                <button onclick="window.location.href='index.html'">
+                    Öffnen
+                </button>
+
+            </div>
+
+            <div class="card">
+
+                <h2>Server Status</h2>
+
+                <p id="serverStatus">Online</p>
+
+                <button onclick="checkServer()">
+                    Prüfen
+                </button>
+
+            </div>
+            <div class="card">
+
+               <h2>Besucher</h2>
+
+               <p id="visitorCount">0 Besucher online</p>
+
+                 <button onclick="addVisitor()">
+                   Aktualisieren
+                 </button>
+
+            </div>
+            <div class="card">
+
+               <h2>System Sperre</h2>
+
+               <p>Webseite sperren</p>
+
+               <button onclick="lockSystem()">
+                 Sperren
+               </button>
+
+            </div>
+            <div class="card">
+
+                <h2>Dark Mode</h2>
+
+                <p>Farben umschalten</p>
+
+                <button onclick="toggleDarkMode()">
+                   Umschalten
+                </button>
+
+            </div>
+            <div class="card">
+
+                       <h2>Alarm</h2>
+
+                       <p>Alarm Sound starten</p>
+
+                       <button onclick="playAlarm()">
+                         Starten
+                       </button>
+
+             </div>
+            <div class="card">
+
+                <h2>Notfallmodus</h2>
+
+                <p>Alarm aktivieren</p>
+
+                <button onclick="activateEmergency()">
+                    Aktivieren
+                </button>
+
+            </div>
+        <div class="card">
+
+    <h2>Letzte Anmeldungen</h2>
+
+    <div id="loginHistoryBox">
+        Keine Daten
+    </div>
+
+ </div>
+
+     <div class="card">
+
+    <h2>Verdächtige Anmeldungen</h2>
+
+    <div id="suspiciousBox">
+        Keine Daten
+    </div>
+
+</div>
+
+<div class="card">
+    <h2>Online Liste</h2>
+    <div id="onlineListBox"></div>
+</div>
+
+<div class="card">
+    <h2>Mitglieder Verzeichnis</h2>
+
+    <button onclick="addMember()">
+        Mitglied hinzufügen
+    </button>
+
+    <div id="memberListBox"></div>
+</div>
+
+<div class="card">
+    <h2>Wochenplan</h2>
+
+    <button onclick="addWeekTask()">
+        Termin hinzufügen
+    </button>
+
+    <div id="weekPlanBox"></div>
+</div>
+
+<div class="card">
+    <h2>Ehrungen</h2>
+
+    <button onclick="addHonor()">
+        Ehrung hinzufügen
+    </button>
+
+    <div id="honorBox"></div>
+</div>
+
+<div class="card">
+    <h2>Kostüm Übersicht</h2>
+
+    <button onclick="addCostume()">
+        Kostüm hinzufügen
+    </button>
+
+    <div id="costumeBox"></div>
+</div>
+        </div>
+                   <div class="card">
+
+                      <h2>Benutzer Verwaltung</h2>
+
+                        <p>Benutzer hinzufügen/löschen</p>
+
+                        <button onclick="addUser()">
+                         Benutzer hinzufügen
+                        </button>
+
+                    <div id="usersList" style="margin-top:15px;"></div>
+
+</div>
+        
+<div class="card">
+    <h2>KKV Profile</h2>
+    <p>Profile aus index.html</p>
+    <button onclick="loadKKVProfiles()">Aktualisieren</button>
+    <div id="kkvProfilesBox">Keine Profile gefunden</div>
+</div>
+
+
+<div class="info-box">
+
+            <h2>System Meldungen</h2>
+
+            <p id="infoText">
+                Willkommen im Vorsitzender Dashboard
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+const vorsitzenderPasswort = "Vorsitzender-KKVs";
+const vorsitzenderKennwort = "Vorsitzender";
+
+function login(){
+
+    const passwort =
+        document.getElementById("password").value;
+
+    const kennwort =
+        document.getElementById("username").value;
+
+    if(
+        passwort === vorsitzenderPasswort &&
+        kennwort === vorsitzenderKennwort
+    ){
+
+        document.getElementById("loginPage")
+            .style.display = "none";
+
+        document.getElementById("dashboard")
+            .style.display = "block";
+
+    }else{
+
+        document.getElementById("error")
+            .innerText =
+            "Falsche Vorsitzenden Daten";
+
+    }
+
+}
+
+function logout(){
+
+    location.reload();
+
+}
+
+function showInfo(text){
+
+    document.getElementById("infoText")
+        .innerText = text;
+
+}
+
+function checkServer(){
+
+    document.getElementById("serverStatus")
+        .innerText = "Server Online";
+
+    showInfo("Server erfolgreich geprüft");
+
+}
+
+let emergencyActive = false;
+let blinkInterval;
+
+function activateEmergency(){
+
+    const info =
+        document.getElementById("infoText");
+
+    if(!emergencyActive){
+
+        emergencyActive = true;
+
+        info.innerText =
+        "🚨  NOTFALL AKTIVIERT 🚨!";
+
+        blinkInterval = setInterval(() => {
+
+            if(document.body.style.background === "#11ff00"){
+
+                document.body.style.background = "#111";
+
+            }else{
+
+                document.body.style.background = "#11ff00";
+
+            }
+
+        }, 300);
+
+        alert("🚨Der Notfallknopf wurde vom Vorsitzenden betätigt!🚨");
+
+    }else{
+
+        emergencyActive = false;
+
+        clearInterval(blinkInterval);
+
+        document.body.style.background = "#111";
+
+        info.innerText =
+        "Notfallmodus deaktiviert";
+
+        alert("Notfallmodus deaktiviert");
+
+    }
+
+}
+
+
+
+
+function toggleUsers(){
+
+    const box =
+        document.getElementById("usersBox");
+
+    if(box.style.display === "none"){
+
+        box.style.display = "block";
+
+    }else{
+
+        box.style.display = "none";
+
+    }
+
+}
+function updateClock(){
+
+    const now = new Date();
+
+    document.getElementById("clock")
+        .innerText =
+        now.toLocaleTimeString();
+
+}
+
+setInterval(updateClock,1000);
+
+
+
+
+let visitors = 0;
+
+function addVisitor(){
+
+    visitors++;
+
+    document.getElementById("visitorCount")
+        .innerText =
+        visitors + " Besucher online";
+
+}
+
+
+
+
+function lockSystem(){
+
+    document.body.innerHTML = `
+    
+    <div style="
+        height:100vh;
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        background:black;
+        color:#11ff00;
+        font-size:50px;
+        font-family:Arial;
+    ">
+        SYSTEM GESPERRT
+    </div>
+    
+    `;
+
+}
+
+
+
+
+let darkMode = true;
+
+function toggleDarkMode(){
+
+    if(darkMode){
+
+        document.body.style.background = "white";
+        document.body.style.color = "black";
+
+        darkMode = false;
+
+    }else{
+
+        document.body.style.background = "#111";
+        document.body.style.color = "white";
+
+        darkMode = true;
+
+    }
+
+}
+
+
+
+
+function playAlarm(){
+
+    const audio = new Audio(
+        "C:/Users/oscar/Desktop/Neu/alarm.mp3"
+    );
+
+    audio.play();
+
+}
+let lockedUsers =
+JSON.parse(
+    localStorage.getItem("lockedUsers")
+) || [];
+let users = [
+    {
+        name:"Admin",
+        online:true,
+        role:"Administrator"
+    }
+];
+
+function renderUsers(){
+
+    const box =
+        document.getElementById("usersList");
+
+    box.innerHTML = "";
+
+    users.forEach((user,index)=>{
+
+        box.innerHTML += `
+
+        <div style="
+            margin-top:10px;
+            padding:10px;
+            background:#2a2a2a;
+            border-radius:10px;
+        ">
+
+            <h3>${user.name}</h3>
+
+            <p>
+                Status:
+                ${user.online ? "🟢 Online" : "🔴 Offline"}
+            </p>
+
+            <p>
+                Rolle:
+                ${user.role}
+            </p>
+
+            <button onclick="toggleStatus(${index})">
+                Status wechseln
+            </button>
+
+           <button onclick="changeRole(${index})">
+                Rechte verwalten
+           </button>
+
+           <button onclick="lockUser(${index})">
+                Sperren
+           </button>
+
+           <button onclick="unlockUser(${index})">
+                Entsperren
+           </button>
+
+           <button onclick="deleteUser(${index})">
+                Löschen
+           </button>
+
+        </div>
+
+        `;
+
+    });
+
+}
+
+function addUser(){
+
+    const name =
+        prompt("Benutzername eingeben");
+
+    if(name){
+
+        users.push({
+            name:name,
+            online:false,
+            role:"Mitglied"
+        });
+
+        renderUsers();
+
+        showInfo(name + " hinzugefügt");
+
+    }
+
+}
+
+function deleteUser(index){
+
+    const deleted =
+        users[index].name;
+
+    users.splice(index,1);
+
+    renderUsers();
+
+    showInfo(deleted + " gelöscht");
+
+}
+
+function toggleStatus(index){
+
+    users[index].online =
+        !users[index].online;
+
+    renderUsers();
+
+}
+
+function changeRole(index){
+
+    const role =
+        prompt(
+            "Neue Rolle:\nAdministrator\nModerator\nMitglied\nTechniker\nDj"
+        );
+
+    if(role){
+
+        users[index].role = role;
+
+        renderUsers();
+
+        showInfo("Rolle geändert");
+
+    }
+
+}
+
+renderUsers();
+          function lockUser(index){
+
+    const name =
+        users[index].name;
+
+    if(
+        !lockedUsers.includes(name)
+    ){
+
+        lockedUsers.push(name);
+
+        localStorage.setItem(
+            "lockedUsers",
+            JSON.stringify(
+                lockedUsers
+            )
+        );
+
+        showInfo(
+            name + " gesperrt"
+        );
+
+    }
+
+}
+
+function unlockUser(index){
+
+    const name =
+        users[index].name;
+
+    lockedUsers =
+        lockedUsers.filter(
+            user => user !== name
+        );
+
+    localStorage.setItem(
+        "lockedUsers",
+        JSON.stringify(
+            lockedUsers
+        )
+    );
+
+    showInfo(
+        name + " entsperrt"
+    );
+
+}
+function loadLoginHistory(){
+
+    const history =
+    JSON.parse(
+        localStorage.getItem(
+            "loginHistory"
+        )
+    ) || [];
+
+    let html = "";
+
+    history
+    .slice(0,10)
+    .forEach(entry=>{
+
+        html += `
+        <p>
+        ${entry.user}
+        -
+        ${entry.status}
+        <br>
+        ${entry.time}
+        </p>
+        `;
+
+    });
+
+    document.getElementById(
+        "loginHistoryBox"
+    ).innerHTML =
+        html || "Keine Daten";
+
+}
+
+function loadSuspicious(){
+
+    const suspicious =
+    JSON.parse(
+        localStorage.getItem(
+            "suspiciousLogins"
+        )
+    ) || [];
+
+    let html = "";
+
+    suspicious
+    .slice(0,10)
+    .forEach(entry=>{
+
+        html += `
+        <p>
+        ${entry.user}
+        <br>
+        ${entry.time}
+        </p>
+        `;
+
+    });
+
+    document.getElementById(
+        "suspiciousBox"
+    ).innerHTML =
+        html || "Keine Daten";
+
+}
+
+function addMember(){
+
+    const name = prompt("Mitglied");
+
+    if(!name) return;
+
+    members.push({
+        name:name,
+        status:"Aktiv"
+    });
+
+    localStorage.setItem(
+        "members",
+        JSON.stringify(members)
+    );
+
+    renderMembers();
+
+}
+
+function renderMembers(){
+
+    let html = "";
+
+    members.forEach((member,index)=>{
+
+        html += `
+        <p>
+        ${member.name}
+
+        <button onclick="deleteMember(${index})">
+        X
+        </button>
+        </p>
+        `;
+
+    });
+
+    document.getElementById(
+        "memberListBox"
+    ).innerHTML = html;
+
+}
+
+function deleteMember(index){
+
+    members.splice(index,1);
+
+    localStorage.setItem(
+        "members",
+        JSON.stringify(members)
+    );
+
+    renderMembers();
+
+}
+
+function addHonor(){
+
+    const person = prompt("Name");
+    if(!person) return;
+
+    const honor = prompt("Ehrung");
+    if(!honor) return;
+
+    honors.push({person:person,honor:honor});
+
+    localStorage.setItem("honors",JSON.stringify(honors));
+    renderHonors();
+
+}
+
+function renderHonors(){
+
+    let html = "";
+
+    honors.forEach(entry=>{
+        html += `<p>${entry.person} - ${entry.honor}</p>`;
+    });
+
+    document.getElementById("honorBox").innerHTML = html;
+
+}
+
+function addCostume(){
+
+    const group = prompt("Gruppe");
+    if(!group) return;
+
+    const amount = prompt("Anzahl");
+
+    costumes.push({group:group,amount:amount});
+
+    localStorage.setItem("costumes",JSON.stringify(costumes));
+    renderCostumes();
+
+}
+
+function renderCostumes(){
+
+    let html = "";
+
+    costumes.forEach(entry=>{
+        html += `<p>${entry.group}: ${entry.amount}</p>`;
+    });
+
+    document.getElementById("costumeBox").innerHTML = html;
+
+}
+
+function addWeekTask(){
+
+    const day = prompt("Tag");
+    if(!day) return;
+
+    const task = prompt("Termin");
+    if(!task) return;
+
+    weekPlan.push({day:day,task:task});
+
+    localStorage.setItem("weekPlan",JSON.stringify(weekPlan));
+    renderWeekPlan();
+
+}
+
+function renderWeekPlan(){
+
+    let html = "";
+
+    weekPlan.forEach(entry=>{
+        html += `<p><b>${entry.day}</b><br>${entry.task}</p>`;
+    });
+
+    document.getElementById("weekPlanBox").innerHTML = html;
+
+}
+
+function renderOnlineList(){
+
+    const history =
+    JSON.parse(localStorage.getItem("loginHistory")) || [];
+
+    let html = "";
+
+    history
+    .filter(x => x.status === "Erfolgreich")
+    .slice(0,10)
+    .forEach(entry=>{
+        html += `<p>🟢 ${entry.user}</p>`;
+    });
+
+    document.getElementById("onlineListBox").innerHTML =
+    html || "Keine Daten";
+
+}
+
+const eventDate =
+    new Date("November 14, 2026 19:19:00");
+
+function updateCountdown(){
+
+    const now =
+        new Date().getTime();
+
+    const distance =
+        eventDate - now;
+
+    const days =
+        Math.floor(distance / (1000*60*60*24));
+
+    const hours =
+        Math.floor(
+            (distance % (1000*60*60*24))
+            / (1000*60*60)
+        );
+
+    const minutes =
+        Math.floor(
+            (distance % (1000*60*60))
+            / (1000*60)
+        );
+
+    const seconds =
+        Math.floor(
+            (distance % (1000*60))
+            / 1000
+        );
+
+    document.getElementById("countdown")
+        .innerText =
+        "🎉 Veranstaltung startet in: "
+        + days + "T "
+        + hours + "Std "
+        + minutes + "Min "
+        + seconds + "Sek";
+
+}
+
+setInterval(updateCountdown,1000);
+let members =
+JSON.parse(
+    localStorage.getItem("members")
+) || [];
+
+let honors =
+JSON.parse(
+    localStorage.getItem("honors")
+) || [];
+
+let costumes =
+JSON.parse(
+    localStorage.getItem("costumes")
+) || [];
+
+let weekPlan =
+JSON.parse(
+    localStorage.getItem("weekPlan")
+) || [];
+loadLoginHistory();
+loadSuspicious();
+
+renderMembers();
+renderHonors();
+renderCostumes();
+renderWeekPlan();
+renderOnlineList();
+
+function loadKKVProfiles(){
+
+    const profiles =
+    JSON.parse(localStorage.getItem("kkvProfiles")) || [];
+
+    let html = "";
+
+    profiles.forEach((profile,index)=>{
+
+        html += `
+        <div style="margin-top:10px;padding:10px;background:#2a2a2a;border-radius:10px;">
+            <h3>${profile.username}</h3>
+            <p>Trainer: ${profile.trainer || "-"}</p>
+            <p>Akteure: ${(profile.actors || []).join(", ") || "-"}</p>
+
+            <button onclick="resetProfilePassword(${index})">
+                Passwort zurücksetzen
+            </button>
+
+            <button onclick="deleteProfileAccount(${index})">
+                Profil löschen
+            </button>
+        </div>`;
+    });
+
+    const box = document.getElementById("kkvProfilesBox");
+    if(box){
+        box.innerHTML = html || "Keine Profile vorhanden";
+    }
+}
+
+function deleteProfileAccount(index){
+
+    let profiles =
+    JSON.parse(localStorage.getItem("kkvProfiles")) || [];
+
+    const name = profiles[index]?.username || "";
+
+    profiles.splice(index,1);
+
+    localStorage.setItem(
+        "kkvProfiles",
+        JSON.stringify(profiles)
+    );
+
+    loadKKVProfiles();
+
+    if(typeof showInfo === "function"){
+        showInfo("Profil gelöscht: " + name);
+    }
+}
+
+function resetProfilePassword(index){
+
+    let profiles =
+    JSON.parse(localStorage.getItem("kkvProfiles")) || [];
+
+    const newPassword = prompt("Neues Passwort");
+
+    if(!newPassword) return;
+
+    profiles[index].password = newPassword;
+
+    localStorage.setItem(
+        "kkvProfiles",
+        JSON.stringify(profiles)
+    );
+
+    if(typeof showInfo === "function"){
+        showInfo("Passwort geändert");
+    }
+}
+
+loadKKVProfiles();
+
+</script>
+
+</body>
+</html>

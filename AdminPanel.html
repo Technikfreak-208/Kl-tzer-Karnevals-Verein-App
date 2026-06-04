@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Dashboard</title>
+
+<style>
+
+body{
+    margin:0;
+    font-family:Arial, sans-serif;
+    background:#111;
+    color:white;
+}
+
+/* LOGIN */
+
+#loginPage{
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:linear-gradient(135deg,#ffffff,#ff0000);
+}
+
+.login-box{
+    background:#1b1b1b;
+    padding:30px;
+    border-radius:20px;
+    width:320px;
+    box-shadow:0 0 25px rgba(0,0,0,0.5);
+}
+
+.login-box h1{
+    text-align:center;
+}
+
+.login-box input{
+    width:100%;
+    padding:12px;
+    margin-top:12px;
+    border:none;
+    border-radius:10px;
+    box-sizing:border-box;
+}
+
+.login-box button{
+    width:100%;
+    padding:12px;
+    margin-top:15px;
+    border:none;
+    border-radius:10px;
+    background:red;
+    color:white;
+    cursor:pointer;
+    font-size:16px;
+}
+
+.error{
+    color:red;
+    text-align:center;
+    margin-top:10px;
+}
+
+/* DASHBOARD */
+
+#dashboard{
+    display:none;
+}
+
+.topbar{
+    background:#1c1c1c;
+    padding:20px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    border-bottom:2px solid red;
+}
+
+.logout{
+    background:red;
+    border:none;
+    padding:10px 15px;
+    border-radius:8px;
+    color:white;
+    cursor:pointer;
+}
+
+.container{
+    padding:30px;
+}
+
+.cards{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:20px;
+}
+
+.card{
+    background:#1f1f1f;
+    padding:20px;
+    border-radius:15px;
+    box-shadow:0 0 15px rgba(0,0,0,0.4);
+}
+
+.card h2{
+    margin-top:0;
+    color:red;
+}
+
+.card button{
+    width:100%;
+    margin-top:15px;
+    padding:12px;
+    border:none;
+    border-radius:10px;
+    background:red;
+    color:white;
+    cursor:pointer;
+}
+
+/* INFO BOX */
+
+.info-box{
+    margin-top:30px;
+    background:#1c1c1c;
+    padding:20px;
+    border-radius:15px;
+}
+
+.info-box h2{
+    color:red;
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- LOGIN -->
+
+<div id="loginPage">
+
+    <div class="login-box">
+
+        <h1>ADMIN LOGIN</h1>
+
+        <input type="password" id="password" placeholder="Passwort">
+
+        <input type="text" id="username" placeholder="Kennwort">
+
+        <button onclick="login()">Anmelden</button>
+
+        <div class="error" id="error"></div>
+
+    </div>
+
+</div>
+
+<!-- DASHBOARD -->
+
+<div id="dashboard">
+
+    <div class="topbar">
+
+        <h1>Admin Dashboard</h1>
+
+        <button class="logout" onclick="logout()">
+            Logout
+        </button>
+
+    </div>
+
+    <div class="container">
+         <h2 id="clock" style="
+          text-align:center;
+          margin-bottom:30px;
+          font-size:35px;
+          color:red;
+         "></h2>
+        <div class="cards">
+
+            <div class="card">
+
+    <h2>Benutzer</h2>
+
+    <p>Benutzer verwalten</p>
+
+    <button onclick="toggleUsers()">
+        Öffnen
+    </button>
+
+    <div id="usersBox" style="display:none; margin-top:15px;">
+
+        <button onclick="showInfo('Prinzengarde geöffnet')">
+            Prinzengarde
+        </button>
+
+        <button onclick="showInfo('Funken geöffnet')">
+            Funken
+        </button>
+
+        <button onclick="showInfo('Landsknechte geöffnet')">
+            Landsknechte
+        </button>
+
+        <button onclick="showInfo('Jugendgarde geöffnet')">
+            Jugendgarde
+        </button>
+
+        <button onclick="showInfo('Glitzerkuppen geöffnet')">
+            Glitzerkuppen
+        </button> 
+
+        <button onclick="showInfo('Minis/Miniminis geöffnet')">
+            Minis/Miniminis
+        </button>
+
+        <button onclick="showInfo('Prinzenpaar/Kinderprinzenpaar geöffnet')">
+            Prinzenpaar/Kinderprinzenpaar 
+        </button>
+
+    </div>
+
+</div>
+
+            <div class="card">
+
+                <h2>Dispatches</h2>
+
+                <p>Dispatch Übersicht öffnen</p>
+
+                <button onclick="window.location.href='dispatches.html'">
+                    Öffnen
+                </button>
+
+            </div>
+
+            <div class="card">
+
+                <h2>Showplan</h2>
+
+                <p>Showplan anzeigen</p>
+
+                <button onclick="window.location.href='showplan.html'">
+                    Öffnen
+                </button>
+
+            </div>
+
+            <div class="card">
+
+                <h2>Webseite</h2>
+
+                <p>Zur Hauptwebseite</p>
+
+                <button onclick="window.location.href='index.html'">
+                    Öffnen
+                </button>
+
+            </div>
+
+            <div class="card">
+
+                <h2>Server Status</h2>
+
+                <p id="serverStatus">Online</p>
+
+                <button onclick="checkServer()">
+                    Prüfen
+                </button>
+
+            </div>
+            <div class="card">
+
+               <h2>Besucher</h2>
+
+               <p id="visitorCount">0 Besucher online</p>
+
+                 <button onclick="addVisitor()">
+                   Aktualisieren
+                 </button>
+
+            </div>
+            <div class="card">
+
+               <h2>System Sperre</h2>
+
+               <p>Webseite sperren</p>
+
+               <button onclick="lockSystem()">
+                 Sperren
+               </button>
+
+            </div>
+            <div class="card">
+
+                <h2>Dark Mode</h2>
+
+                <p>Farben umschalten</p>
+
+                <button onclick="toggleDarkMode()">
+                   Umschalten
+                </button>
+
+            </div>
+            <div class="card">
+
+                       <h2>Alarm</h2>
+
+                       <p>Alarm Sound starten</p>
+
+                       <button onclick="playAlarm()">
+                         Starten
+                       </button>
+
+             </div>
+            <div class="card">
+
+                <h2>Notfallmodus</h2>
+
+                <p>Alarm aktivieren</p>
+
+                <button onclick="activateEmergency()">
+                    Aktivieren
+                </button>
+
+            </div>
+
+        </div>
+
+        <div class="info-box">
+
+            <h2>System Meldungen</h2>
+
+            <p id="infoText">
+                Willkommen im Admin Dashboard
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+const adminPasswort = "20Admin-Panel08";
+const adminKennwort = "Admin";
+
+function login(){
+
+    const passwort =
+        document.getElementById("password").value;
+
+    const kennwort =
+        document.getElementById("username").value;
+
+    if(
+        passwort === adminPasswort &&
+        kennwort === adminKennwort
+    ){
+
+        document.getElementById("loginPage")
+            .style.display = "none";
+
+        document.getElementById("dashboard")
+            .style.display = "block";
+
+    }else{
+
+        document.getElementById("error")
+            .innerText =
+            "Falsche Admin Daten";
+
+    }
+
+}
+
+function logout(){
+
+    location.reload();
+
+}
+
+function showInfo(text){
+
+    document.getElementById("infoText")
+        .innerText = text;
+
+}
+
+function checkServer(){
+
+    document.getElementById("serverStatus")
+        .innerText = "Server Online";
+
+    showInfo("Server erfolgreich geprüft");
+
+}
+
+let emergencyActive = false;
+let blinkInterval;
+
+function activateEmergency(){
+
+    const info =
+        document.getElementById("infoText");
+
+    if(!emergencyActive){
+
+        emergencyActive = true;
+
+        info.innerText =
+        "🚨  NOTFALL AKTIVIERT 🚨!";
+
+        blinkInterval = setInterval(() => {
+
+            if(document.body.style.background === "red"){
+
+                document.body.style.background = "#111";
+
+            }else{
+
+                document.body.style.background = "red";
+
+            }
+
+        }, 300);
+
+        alert("🚨Der Notfallknopf wurde vom Admin betätigt!🚨");
+
+    }else{
+
+        emergencyActive = false;
+
+        clearInterval(blinkInterval);
+
+        document.body.style.background = "#111";
+
+        info.innerText =
+        "Notfallmodus deaktiviert";
+
+        alert("Notfallmodus deaktiviert");
+
+    }
+
+}
+
+
+
+
+function toggleUsers(){
+
+    const box =
+        document.getElementById("usersBox");
+
+    if(box.style.display === "none"){
+
+        box.style.display = "block";
+
+    }else{
+
+        box.style.display = "none";
+
+    }
+
+}
+function updateClock(){
+
+    const now = new Date();
+
+    document.getElementById("clock")
+        .innerText =
+        now.toLocaleTimeString();
+
+}
+
+setInterval(updateClock,1000);
+
+
+
+
+let visitors = 0;
+
+function addVisitor(){
+
+    visitors++;
+
+    document.getElementById("visitorCount")
+        .innerText =
+        visitors + " Besucher online";
+
+}
+
+
+
+
+function lockSystem(){
+
+    document.body.innerHTML = `
+    
+    <div style="
+        height:100vh;
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        background:black;
+        color:red;
+        font-size:50px;
+        font-family:Arial;
+    ">
+        SYSTEM GESPERRT
+    </div>
+    
+    `;
+
+}
+
+
+
+
+let darkMode = true;
+
+function toggleDarkMode(){
+
+    if(darkMode){
+
+        document.body.style.background = "white";
+        document.body.style.color = "black";
+
+        darkMode = false;
+
+    }else{
+
+        document.body.style.background = "#111";
+        document.body.style.color = "white";
+
+        darkMode = true;
+
+    }
+
+}
+
+
+
+
+function playAlarm(){
+
+    const audio = new Audio(
+        "C:/Users/oscar/Desktop/Neu/alarm.mp3"
+    );
+
+    audio.play();
+
+}
+</script>
+
+</body>
+</html>

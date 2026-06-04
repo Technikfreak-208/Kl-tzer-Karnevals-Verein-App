@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Raumplan Saal</title>
+
+<style>
+body{margin:0;font-family:Arial,sans-serif;background:#f2f2f2;}
+#loginPage{height:100vh;display:flex;justify-content:center;align-items:center;background:linear-gradient(135deg,#ffffff,#11ff00);}
+.login-box{background:#11ff00;padding:30px;border-radius:15px;width:320px;box-shadow:0 0 20px rgba(0,0,0,.3);}
+.login-box input,.login-box button{width:100%;padding:12px;margin-top:10px;box-sizing:border-box;border-radius:8px;}
+.error{color:red;text-align:center;margin-top:10px;}
+#mainPage{display:none;height:100vh;}
+.layout{display:flex;height:100%;}
+.sidebar{width:250px;background:#11ff00;color:white;padding:20px;}
+.sidebar a{display:inline-block;margin-top:15px;color:#11ff00;background:white;padding:10px 15px;border-radius:8px;text-decoration:none;}
+.content{flex:1;position:relative;overflow:auto;}
+.content img{width:700px;height:auto;display:block;margin:40px auto;border-radius:15px;}
+.map-button{position:absolute;padding:10px 15px;background:#11ff00;color:#fff;border:none;border-radius:8px;cursor:pointer;}
+#Rote-Funken{top:46%}
+#profileBtn,#logoutBtn{
+position:absolute;top:20px;padding:10px 15px;border:none;border-radius:8px;cursor:pointer;z-index:1000;
+}
+#profileBtn{right:20px;background:#11ff00;color:white;}
+#logoutBtn{right:120px;background:#ff4444;color:white;display:none;}
+
+#profileWindow{
+display:none;position:absolute;top:70px;right:20px;width:320px;background:white;
+padding:15px;border-radius:10px;box-shadow:0 0 15px rgba(0,0,0,.3);z-index:1000;
+}
+#profileWindow input{width:100%;padding:8px;margin-bottom:8px;box-sizing:border-box;}
+#actorList li{margin:4px 0;}
+#currentUser{
+position:absolute;top:20px;left:20px;background:white;padding:8px 12px;border-radius:8px;display:none;
+}
+</style>
+</head>
+<body>
+
+<div id="loginPage">
+<div class="login-box">
+<h2>Login KKV</h2>
+<input type="password" id="password" placeholder="Passwort">
+<input type="text" id="code" placeholder="Kennwort / Benutzername">
+<button onclick="login()">Anmelden</button>
+<div class="error" id="error"></div>
+</div>
+</div>
+
+<div id="mainPage">
+<div class="layout">
+
+<div class="sidebar">
+<h1>Raumplan Saal Erdgeschoss</h1>
+<a href="1. Etage.html">1. Etage</a>
+<a href="showplan.html">Showplan öffnen</a>
+<a href="dispatches.html">Dispatch Übersicht</a>
+<a href="dispatch.html">Dispatch erstellen</a>
+<a href="https://kkv-kloetze.de">Webseite</a>
+<a href="Moderator.html">Moderator Login</a>
+<a href="Vorsitzender.html">Vorsitzender Login</a>
+<a href="Glitzerkuppen.html">Glitzerkuppen Login</a>
+</div>
+
+<div class="map-button">
+ <button id="Rote-Funken">Rote Funken</button>
+ 
+</div>
+
+
+
+<div class="content"></div>
+
+<div id="currentUser"></div>
+
+<button id="profileBtn" onclick="toggleProfile()">Profil</button>
+<button id="logoutBtn" onclick="logout()">Logout</button>
+
+<div id="profileWindow">
+<h3>Profilverwaltung</h3>
+<input type="text" id="profileName" placeholder="Benutzername">
+<input type="password" id="profilePassword" placeholder="Passwort">
+<input type="text" id="trainerName" placeholder="Trainer">
+
+<input type="text" id="actorName" placeholder="Akteur">
+<button onclick="addActor()">Akteur hinzufügen</button>
+
+<ul id="actorList"></ul>
+
+<button onclick="saveProfile()">Profil speichern</button>
+
+<hr>
+<h4>Gespeicherte Profile</h4>
+<select id="profileSelect" style="width:100%;padding:8px;"></select>
+<button onclick="loadProfile()">Profil laden</button>
+<button onclick="deleteProfile()">Profil löschen</button>
+</div>
+
+<img src="saalbild.jpg" alt="Saalbild">
+
+</div>
+</div>
+</div>
+
+<script>
+const hauptPasswort="KKVlife";
+
+const kennwoerter=[
+"Prinzengarde","Funken","Landsknechte","Jugendgarde",
+"Admin","Glitzerkuppen","Djay","Werker",
+"Frauentanzzgruppe","Prinzenpaar","Kinderprinzenpaar","Techniker"
+];
+
+let actors=[];
+
+function getProfiles(){
+ return JSON.parse(localStorage.getItem("kkvProfiles")||"[]");
+}
+
+function saveProfiles(list){
+ localStorage.setItem("kkvProfiles",JSON.stringify(list));
+ updateProfileList();
+}
+
+function login(){
+ const passwort=document.getElementById("password").value;
+ const kennwort=document.getElementById("code").value;
+
+ let erlaubt=false;
+
+ if(passwort===hauptPasswort && kennwoerter.includes(kennwort)){
+   erlaubt=true;
+ }
+
+ const profiles=getProfiles();
+ const profil=profiles.find(p=>p.username===kennwort && p.password===passwort);
+
+ if(profil){
+   erlaubt=true;
+ }
+
+ if(erlaubt){
+   document.getElementById("loginPage").style.display="none";
+   document.getElementById("mainPage").style.display="block";
+   document.getElementById("logoutBtn").style.display="block";
+
+   document.getElementById("currentUser").style.display="block";
+   document.getElementById("currentUser").innerText="Eingeloggt als: "+kennwort;
+ }else{
+   document.getElementById("error").innerText="Falsches Passwort oder Kennwort";
+ }
+}
+
+function logout(){
+ location.reload();
+}
+
+function toggleProfile(){
+ const w=document.getElementById("profileWindow");
+ w.style.display=w.style.display==="block"?"none":"block";
+}
+
+function addActor(){
+ const input=document.getElementById("actorName");
+ if(!input.value.trim()) return;
+ actors.push(input.value.trim());
+ input.value="";
+ renderActors();
+}
+
+function renderActors(){
+ const list=document.getElementById("actorList");
+ list.innerHTML="";
+ actors.forEach((a,i)=>{
+   const li=document.createElement("li");
+   li.innerHTML=a+' <button onclick="removeActor('+i+')">X</button>';
+   list.appendChild(li);
+ });
+}
+
+function removeActor(i){
+ actors.splice(i,1);
+ renderActors();
+}
+
+function saveProfile(){
+ const username=document.getElementById("profileName").value.trim();
+ const password=document.getElementById("profilePassword").value.trim();
+ const trainer=document.getElementById("trainerName").value.trim();
+
+ if(!username || !password){
+   alert("Benutzername und Passwort erforderlich");
+   return;
+ }
+
+ let profiles=getProfiles();
+
+ profiles=profiles.filter(p=>p.username!==username);
+
+ profiles.push({
+   username,password,trainer,actors
+ });
+
+ saveProfiles(profiles);
+
+ alert("Profil gespeichert");
+}
+
+function updateProfileList(){
+ const select=document.getElementById("profileSelect");
+ if(!select) return;
+
+ select.innerHTML="";
+
+ getProfiles().forEach(p=>{
+   const option=document.createElement("option");
+   option.value=p.username;
+   option.textContent=p.username;
+   select.appendChild(option);
+ });
+}
+
+function loadProfile(){
+ const name=document.getElementById("profileSelect").value;
+ const profile=getProfiles().find(p=>p.username===name);
+ if(!profile) return;
+
+ document.getElementById("profileName").value=profile.username;
+ document.getElementById("profilePassword").value=profile.password;
+ document.getElementById("trainerName").value=profile.trainer;
+
+ actors=[...(profile.actors||[])];
+ renderActors();
+}
+
+function deleteProfile(){
+ const name=document.getElementById("profileSelect").value;
+ if(!name) return;
+
+ const profiles=getProfiles().filter(p=>p.username!==name);
+ saveProfiles(profiles);
+
+ alert("Profil gelöscht");
+}
+
+window.onload=function(){
+ updateProfileList();
+}
+</script>
+
+</body>
+</html>
